@@ -124,7 +124,7 @@ def index2char_TIMIT(input_index_seq = None, TIMIT_pkl_file = os.path.join(os.ge
 	with open(TIMIT_pkl_file,'rb') as f:
 		data = pickle.load(f)
 		list_of_alphabets = data['chars']
-	blank_char = '_'
+	blank_char = '#'
 	list_of_alphabets.append(blank_char)
 	output_character_seq = [list_of_alphabets[i] for i in input_index_seq]
 	output_sentence = ''.join(output_character_seq)
