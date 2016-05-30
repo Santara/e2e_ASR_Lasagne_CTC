@@ -66,7 +66,7 @@ def get_data(rootdir = TIMIT_main_dir):
 				input_data, f_s = sf.read(wav_file_name)
 				# mfcc_feat = MFCC_input(mfcc(input_data,f_s))
 				mfcc_feat = mfcc(input_data,f_s)
-				inputs.append(mfcc_feat)#Rakeshvar wants one frame along each column but i am using Lasagne
+				inputs.append(np.asarray(mfcc_feat, dtype=theano.config.floatX))#Rakeshvar wants one frame along each column but i am using Lasagne
 
 				text_file_name = wav_file_name[:-4] + '.txt'
 				target_data_file = open(text_file_name)
@@ -159,7 +159,12 @@ def prepare_TIMIT_for_CTC(dataset='train', savedir = os.getcwd()):
 	out_file_name = savedir + '/TIMIT_data_prepared_for_CTC.pkl'
 	with open(out_file_name, 'wb') as f:
 		# pickle.dump({'x':inputs, 'y_indices': targets_as_alphabet_indices, 'y_char': targets, 'y_onehot': targets_one_hot, 'chars': list_of_alphabets}, f, protocol=3)
-		pickle.dump({'x':X.astype(theano.config.floatX), 'mask': input_mask.astype(theano.config.floatX), 'y_indices': targets_as_alphabet_indices, 'y_char': targets, 'y_onehot': targets_one_hot, 'chars': list_of_alphabets}, f, protocol=2)
+		pickle.dump({'x':X,
+			'inputs': inputs, 
+			'mask': input_mask.astype(theano.config.floatX), \
+			'y_indices': targets_as_alphabet_indices, 
+			'y_char': targets, 'y_onehot': targets_one_hot, 
+			'chars': list_of_alphabets}, f, protocol=2)
 
 	# with open(out_file_name, 'rb') as f:
 	# 	reclaimed_data = pickle.load(f)

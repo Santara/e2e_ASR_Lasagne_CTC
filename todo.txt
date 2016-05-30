@@ -1,0 +1,8 @@
+1. Prepare the whole TIMIT dataset
+2. Make a validation split
+3. Generate the delta and delta delta features (see what all features were taken in the original paper)
+4. Make the original neural network architecture with BRNN and check if the network can learn with Lasagne CTC
+5. Change the activation function from ReLU to thresholded ReLU. Check original stanford-CTC code to find out if the modified ReLU was only used in the recurrent layer or in both the recurrent and fully connected layers.
+5. Write code to generate the argmax decodings of stage 1. Evaluate stage 1 by generating the decodings for 100 randomly chosen examples. Output the decodings after every 10 epochs.
+
+1. Evaluate the CLM by measures like perplexity.
