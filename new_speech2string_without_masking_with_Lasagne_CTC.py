@@ -63,7 +63,7 @@ l_rec_forward = RecurrentLayer(h_1, num_units=hidden_size, grad_clipping=gradien
 l_rec_backward = RecurrentLayer(h_1, num_units=hidden_size, grad_clipping=gradient_clipping, nonlinearity=clipped_relu, backwards=True)
 l_rec_accumulation = ElemwiseSumLayer([l_rec_forward,l_rec_backward])
 l_rec_reshaped = ReshapeLayer(l_rec_accumulation, (-1,hidden_size))
-l_out = DenseLayer(l_rec_reshaped, num_units=output_size)
+l_out = DenseLayer(l_rec_reshaped, num_units=output_size, nonlinearity=lasagne.nonlinearities.linear)
 l_out_reshaped = ReshapeLayer(l_out, (n_batch, n_time_steps, output_size))#Reshaping back
 l_out_softmax = NonlinearityLayer(l_out, nonlinearity=lasagne.nonlinearities.softmax)
 l_out_softmax_reshaped = ReshapeLayer(l_out_softmax, (n_batch, n_time_steps, output_size))
