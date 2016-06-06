@@ -41,7 +41,7 @@ char = data['chars']
 input_size = len(inp1[0][0])
 hidden_size = 1824
 num_output_classes = len(char)
-learning_rate = 0.01
+learning_rate = 0.0627
 output_size = num_output_classes+1
 batch_size = None
 input_seq_length = None
@@ -107,8 +107,8 @@ cost = T.mean(true_cost)
 # In[13]:
 
 
-shared_learning_rate = theano.shared(lasagne.utils.floatX(0.01))
-updates = lasagne.updates.rmsprop(pseudo_cost_grad, all_params, learning_rate=learning_rate)
+shared_learning_rate = theano.shared(lasagne.utils.floatX(learning_rate))
+updates = lasagne.updates.rmsprop(pseudo_cost_grad, all_params, learning_rate=shared_learning_rate)
 
 
 # In[14]:
