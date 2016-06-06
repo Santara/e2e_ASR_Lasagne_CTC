@@ -4,14 +4,17 @@ a,b,k,T=10,10,10,30
 p_ctc=defaultdict(float)
 sig1=[chr(i) for i in xrange(97,123)]
 sig1+=['_',' ']
+
+#============Test values for CTC and CLM============================
 for i in sig1:
-	p_ctc[i]=[0]*(T+1)
+	p_ctc[i]=[0]*(T+1) #Make p_ctc a 1-d array
 	for j in xrange(T+1):
 		p_ctc[i][j]=random.random()
 
 p_clm=defaultdict(float)
 for i in sig1:
 	p_clm[i]=random.random()
+#===================================================================
 
 p_b=defaultdict(float)
 p_nb=defaultdict(float)
@@ -25,9 +28,16 @@ sig.append(' ')
 
 
 import heapq
-for t in xrange(1,T+1):
+for t in xrange(1,T+1): #For every time instant
+    #=================
+    #Call the CTC here
+    #=================
     z_next=[]
-    for l in z_prev:
+    for l in z_prev: #Every string in previous set 
+
+        #=================
+        #Call the CLM here
+        #=================
 
     	# Initializing all probabilities of string 'l' in p_b and p_nb
     	if l!='_':

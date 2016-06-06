@@ -3,6 +3,7 @@ import os
 import theano
 import theano.tensor as T
 import lasagne
+from lasagne.layers import get_all_param_values
 import pdb
 # from ctc import CTCLayer
 # from TIMIT_utils import create_mask
@@ -25,7 +26,7 @@ LEARNING_RATE = 0.001
 N_BATCH = 100
 
 #Gradient clipping
-GRAD_CLIP = 100
+GRAD_CLIP = 5
 
 #How often we check the output
 EPOCH_SIZE = 100
@@ -46,7 +47,7 @@ print("Building the network...")
 l_in = lasagne.layers.InputLayer(shape = (None, None, INPUT_SIZE)) #One-hot represenntation of character indices
 l_mask = lasagne.layers.InputLayer(shape = (None, None))
 
-l_recurrent = lasagne.layers.RecurrentLayer(incoming = l_in, num_units=N_HIDDEN, mask_input = l_mask, learn_init=True)
+l_recurrent = lasagne.layers.RecurrentLayer(incoming = l_in, num_units=N_HIDDEN, mask_input = l_mask, learn_init=True, grad_clipping=GRAD_CLIP)
 Recurrent_output=lasagne.layers.get_output(l_recurrent)
 
 n_batch, n_time_steps, n_features = l_in.input_var.shape
@@ -113,7 +114,7 @@ print("Pointwise Cost: {}"
 
 cost_vector = []
 for epoch in range(NUM_EPOCHS):	
-
+	#pdb.set_trace()
 	shuffle_order = np.random.permutation(x.shape[0])
 	x = x[shuffle_order, :]
 	y = y[shuffle_order, :]
@@ -127,6 +128,8 @@ for epoch in range(NUM_EPOCHS):
 		"\tcost = {}".format(epoch,cost) )
 
 	cost_vector.append(cost)
+	if epoch % 10 == 0:
+		np.savez('CLM_model.npz', *get_all_param_values(l_dense, trainable=True))
 
 # plt.plot(np.arange(NUM_EPOCHS),cost_vector)
 # plt.show()
