@@ -58,12 +58,13 @@ y = T.imatrix('targets')
 
 l_in = InputLayer(shape=(batch_size, input_seq_length, input_size))
 n_batch, n_time_steps, n_features = l_in.input_var.shape #Unnecessary in this version. Just collecting the info so that we can reshape the output back to the original shape
-h_1 = DenseLayer(l_in, num_units=hidden_size, nonlinearity=clipped_relu)
-l_rec_forward = RecurrentLayer(h_1, num_units=hidden_size, grad_clipping=gradient_clipping, nonlinearity=clipped_relu)
-l_rec_backward = RecurrentLayer(h_1, num_units=hidden_size, grad_clipping=gradient_clipping, nonlinearity=clipped_relu, backwards=True)
+# h_1 = DenseLayer(l_in, num_units=hidden_size, nonlinearity=clipped_relu)
+l_rec_forward = RecurrentLayer(l_in, num_units=hidden_size, grad_clipping=gradient_clipping, nonlinearity=clipped_relu)
+l_rec_backward = RecurrentLayer(l_in, num_units=hidden_size, grad_clipping=gradient_clipping, nonlinearity=clipped_relu, backwards=True)
 l_rec_accumulation = ElemwiseSumLayer([l_rec_forward,l_rec_backward])
 l_rec_reshaped = ReshapeLayer(l_rec_accumulation, (-1,hidden_size))
-l_out = DenseLayer(l_rec_reshaped, num_units=output_size, nonlinearity=lasagne.nonlinearities.linear)
+l_h2 = DenseLayer(l_rec_reshaped, num_units=hidden_size, nonlinearity=clipped_relu)
+l_out = DenseLayer(l_h2, num_units=output_size, nonlinearity=lasagne.nonlinearities.linear)
 l_out_reshaped = ReshapeLayer(l_out, (n_batch, n_time_steps, output_size))#Reshaping back
 l_out_softmax = NonlinearityLayer(l_out, nonlinearity=lasagne.nonlinearities.softmax)
 l_out_softmax_reshaped = ReshapeLayer(l_out_softmax, (n_batch, n_time_steps, output_size))
