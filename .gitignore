@@ -1,2 +1,5 @@
 #Pickle files
 *.pkl
+
+#Model files
+*.npz
